@@ -10,29 +10,36 @@ NavComponent = () => {
   </nav>
 }
 
-ListComponent = ({ data }) => {
+RowComponent = ({ index, style, data, by }) => {
+  if (tt.get('byDefault') === 'byDefault') {
+    return <div style={{ backgroundColor: data[by][index].backgroundColor, color: 'white', ...style }}>
+      编号：{index + 1} 书名：{data[by][index].name}
+    </div>
+  }
+
+  if (tt.get('byDate')) {
+    if (_.isString(data[by][index])) {
+      return <div style={{ ...style }}>
+        <h3>{data[by][index]}</h3>
+      </div>
+    } else {
+      return <div style={{ backgroundColor: data[by][index].backgroundColor, color: 'white', ...style }}>
+        编号：{index + 1} 书名：{data[by][index].name}
+      </div>
+    }
+  }
+}
+
+ListComponent = ({ data, by }) => {
   console.log('rerun')
   return <div>
     <NavComponent />
-    <List width={680} height={300} rowCount={data[tt.get()].length} rowHeight={50} rowRenderer={({ key, index, style }) => {
-      if (tt.get('byDefault') === 'byDefault') {
-        return <div key={key} style={{ backgroundColor: data[tt.get()][index].backgroundColor, color: 'white', ...style }}>
-          编号：{index + 1} 书名：{data[tt.get()][index].name}
-        </div>
-      }
-
-      if (tt.get('byDate')) {
-        if (_.isString(data[tt.get()][index])) {
-          return <div key={key} style={{ ...style }}>
-            <h3>{data[tt.get()][index]}</h3>
-          </div>
-        } else {
-          return <div key={key} style={{ backgroundColor: data[tt.get()][index].backgroundColor, color: 'white', ...style }}>
-            编号：{index + 1} 书名：{data[tt.get()][index].name}
-          </div>
-        }
-      }
-    }}
+    <List
+      width={680}
+      height={300}
+      rowCount={data[by].length}
+      rowHeight={50}
+      rowRenderer={({ index, style }) => <RowComponent key={index} index={index} style={style} data={data} by={by} />}
     />
   </div>
 }

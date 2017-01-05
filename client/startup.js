@@ -1,4 +1,7 @@
 Meteor.startup(function() {
-  const Test = Container(SubsTracker)(ListComponent)
+  const Test = ComposeAll(
+    Container(SubsTracker),
+    Container(NavTracker),
+  )(ListComponent)
   render(<Test />, $('#app')[0])
 })
